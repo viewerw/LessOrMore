@@ -1,9 +1,8 @@
 # Site settings
 name: Less Or More
 email: 15601598900@126.com
-author:viewerw
+author: viewerw
 url: http://www.wwyuan.cn
-resume_site:
 github: https://github.com/viewerw/
 baseurl: ""
 description: !
