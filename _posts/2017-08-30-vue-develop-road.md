@@ -25,10 +25,12 @@ data中 对象的属性附加问题
 -------------------------------
 ![云盘图片](/styles/images/yupan.png)
 以最近开发的云盘的项目为例，从图中可以看到，每个文件都需要一个状态来表示当前是否是处于被用户选中的状态，然而，后台查询接口返回的`fileList`里每个`file`对象里面是肯定没有这个属性的，因为这是前台的交互行为附加的属性。那么，我们怎么去加上这个属性呢？如果，想法是用户点击这个文件的时候，给这个文件对象加上附加属性。代码可能是这样的：
-	chooseFile(item){
+
+    chooseFile(item){
 		item.choosed?item.choosed=false:item.choosed=true;
     },
 这样的问题是什么呢，就是点击文件并不会出现选中的小勾，而这时，那个点击的文件对象的choosed属性值也确实是true，而这边这样写的样式确没有加载出来
+
 	<div  :class = "{checked:item.choosed,check:!item.choosed}"></div>
 这时，就有点抓狂了，你会对着`console`里面打印出来的file的choosed属性值 和 页面上并不相称的渲染结果陷入深思。。。难道是vue数据渲染机制出bug了吗？
 
