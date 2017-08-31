@@ -29,9 +29,11 @@ data中 对象的属性附加问题
     chooseFile(item){
 		item.choosed?item.choosed=false:item.choosed=true;
     },
+
 这样的问题是什么呢，就是点击文件并不会出现选中的小勾，而这时，那个点击的文件对象的choosed属性值也确实是true，而这边这样写的样式确没有加载出来
 
 	<div  :class = "{checked:item.choosed,check:!item.choosed}"></div>
+
 这时，就有点抓狂了，你会对着`console`里面打印出来的file的choosed属性值 和 页面上并不相称的渲染结果陷入深思。。。难道是vue数据渲染机制出bug了吗？
 
 解决
@@ -44,7 +46,9 @@ data中 对象的属性附加问题
 >解决第二类问题：数组整体的重新替换
 
 因为官网上举例用的是数组，所以，新手给对象的属性赋值就会出现上面的错误，所以，刚刚的代码可以这样写
+
 	chooseFile(item){
 		item.choosed?this.$set(item,'choosed',false):this.$set(item,'choosed',true);
     },
+    
 那么，你学到了吗？
