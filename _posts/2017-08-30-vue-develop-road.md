@@ -40,9 +40,12 @@ data中 对象的属性附加问题
 ------------------------------------
 首先，我们看看官网上的一段话：
 >由于 JavaScript 的限制， Vue 不能检测以下变动的数组：
->1.当你利用索引直接设置一个项时，例如： vm.items[indexOfItem] = newValue
->2.当你修改数组的长度时，例如： vm.items.length = newLength
+
+>1. 当你利用索引直接设置一个项时，例如： vm.items[indexOfItem] = newValue
+>2. 当你修改数组的长度时，例如： vm.items.length = newLength
+
 > 解决第一类问题：Vue.set(example1.items, indexOfItem, newValue)
+
 >解决第二类问题：数组整体的重新替换
 
 因为官网上举例用的是数组，所以，新手给对象的属性赋值就会出现上面的错误，所以，刚刚的代码可以这样写
@@ -50,5 +53,5 @@ data中 对象的属性附加问题
 	chooseFile(item){
 		item.choosed?this.$set(item,'choosed',false):this.$set(item,'choosed',true);
     },
-    
+
 那么，你学到了吗？
