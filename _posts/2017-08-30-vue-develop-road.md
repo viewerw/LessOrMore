@@ -40,13 +40,13 @@ data中 对象的属性附加问题
 ------------------------------------
 首先，我们看看官网上的一段话：
 >由于 JavaScript 的限制， Vue 不能检测以下变动的数组：
-
+>
 >1. 当你利用索引直接设置一个项时，例如： vm.items[indexOfItem] = newValue
 >2. 当你修改数组的长度时，例如： vm.items.length = newLength
-
+>
 > 解决第一类问题：Vue.set(example1.items, indexOfItem, newValue)
-
->解决第二类问题：数组整体的重新替换
+>
+>解决第二类问题：数组整体的重新替换	
 
 因为官网上举例用的是数组，所以，新手给对象的属性赋值就会出现上面的错误，所以，刚刚的代码可以这样写
 
@@ -55,3 +55,65 @@ data中 对象的属性附加问题
     },
 
 那么，你学到了吗？
+
+
+事件绑定
+======================
+
+场景
+----------------------
+  这个场景太多了，vue组件向外部传递数据就是通过事件触发的方式，我们通过在外部指定一个`method`来处理组件触发的事件。
+
+例子
+------------------------
+  当用户输入关键字进行搜索的时候，我们不能在每个`input`事件被触发的时候都去调用接口查询，一来，接口返回有延迟，会导致查询结果慢一拍，还不停变化，二来，对接口的请求次数过高，服务器压力大。这时，我们需要用到去抖函数`debounce`。
+  查询框模板：
+
+    <input @input=" searchPartner" type="" placeholder="请输入同伴姓名" v-model.trim="search_info">
+
+  查询方法：
+	
+	methods：{
+			searchPartner(){
+                let self = this;
+                return _.debounce(function(){self.search_stu_info()},400)
+            },
+            search_stu_info(){
+            	...调接口
+            }
+	}
+  当我写完代码运行的时候，发现根本就没有调用接口，也就是根本没有走到`search_stu_info`方法，于是，我认为是事件绑定出了问题，input事件绑定的方法根本不是去抖函数的返回值，于是，我修改了模板：
+
+    <input @input=" searchPartner()" type="" placeholder="请输入同伴姓名" v-model.trim="search_info">
+
+  只是加了括号，我希望`searchPartner`自执行，从而返回去抖函数绑定到input事件。再次运行，发现还是没调用接口，想了一会儿，想不通==！
+
+解决
+--------------------
+  当然，这个问题首先需要搞明白的是在vue事件绑定中，`@input=" searchPartner"`和`@input=" searchPartner()"`有什么区别，答案就是没啥区别。。
+  上源码：
+
+    if (!handler.modifiers) {
+	    return simplePathRE.test(handler.value)
+	      ? handler.value
+	      : `function($event){${handler.value}}`
+	}
+
+  带括号的生成
+
+    on: {
+       "click": function($event) {
+             doXX()
+          }
+    }
+
+  不带括号生成：
+
+    on: { "click": doXX }
+
+  所以区别就是外面包裹了一个function，所以带括号的方法也并不会自执行，它只会被当成字符串原封不动的被搬过来，所以，绑定到input事件的方法，永远都不可能是`searchPartner()`的返回值，那该怎么写呢，后来看别人的代码发现是这样写的：
+
+    searchPartner:_.debounce(function(){this.search_stu_info()},400),
+
+  因为用es6语法用的久了，竟然忘记methods是一个对象，`searchPartner(){}`其实是等价于`searchPartner:function(){}`,所以，为什么要把`_.debounce(function(){this.search_stu_info()},400)`写在return 里面呢。
+  所以，你学到了吗？
