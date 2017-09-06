@@ -82,6 +82,7 @@ data中 对象的属性附加问题
             	...调接口
             }
 	}
+	
   当我写完代码运行的时候，发现根本就没有调用接口，也就是根本没有走到`search_stu_info`方法，于是，我认为是事件绑定出了问题，input事件绑定的方法根本不是去抖函数的返回值，于是，我修改了模板：
 
     <input @input=" searchPartner()" type="" placeholder="请输入同伴姓名" v-model.trim="search_info">
