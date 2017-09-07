@@ -120,25 +120,29 @@ data中 对象的属性附加问题
 
   所以，你学到了吗？
 
-  vue的复用机制
-  =====================
-  场景
-  ----------------------
+vue的复用机制
+=====================
+
+场景
+----------------------
+
   使用vue写项目，会经常频繁的使用到`v-for`去渲染列表，有一些列表项是不带状态的，有些是带状态的（例如，是否勾选），vue在设计的时候，为了更高效率的渲染出dom，它提供了模板复用的机制。
 
-  例子
-  -----------------------
-  ![正常效果](/styles/images/rightkey.png)
+例子
+-----------------------
+
+![正常效果](/styles/images/rightkey.png)
   出于项目需求，我需要实现一个双向选择的穿梭框，勾选左边列表的任意一项，该项都会出现在右侧列表，点击右侧列表的任一项后面的删除图标，左侧列表项前面的勾选状态都要去掉，同时，点击左侧列表每一项后面的`>>`，可以支持进入其子项的列表。例如，首先左侧列表展示所有的班级列表，点击任一项后面的`>>`图标，都可以进入该班级下面的学生列表，学生列表依旧展示在左侧。所有的班级项和学生项，都支持通过勾选移动到右侧。
 
   初步分析之后，借助elmentui提供的元素，很快写出了初步的实现效果，但是很快发现了一个问题，当我选中班级列表的第一项，然后再进入其它任一班级的学生列表，这时候，发现，学生列表的第一项会被默认选中，而右侧没有这条数据。通过打印log发现，该学生项的选中状态也是 false，所以，第一个学生项为什么会被选中呢？？（wtf？？黑人问号）
 
   如图：
 
-  ![错误效果](/styles/images/errkey.png)
+![错误效果](/styles/images/errkey.png)
 
-  解决
-  --------------------------------
+解决
+--------------------------------
+
   这个问题就是由于vue的复用机制导致的！
 
   首先：
@@ -154,12 +158,12 @@ data中 对象的属性附加问题
   代码如下：
 
 	<div style="height:290px;overflow-y:auto">
-       <div v-for="(item,index) in sdata1" class = "check-item" :key="item.id">
+        <div v-for="(item,index) in sdata1" class = "check-item" :key="item.id">
            <el-checkbox @change = "itemClick(item)" v-model="item.checked">{{item.name}}</el-checkbox>
 
            <i v-show="!item.checked&&!item.end" title="进入" style = "width:30px;height:30px;line-height:30px;text-align:center" class = "el-icon-d-arrow-right" @click.stop = "getChildren(item)"></i>
-       </div>
-   </div>
+        </div>
+   	</div>
 
   这样做，可能会有一个bug，就是当学生的id和班级的id相同的时候，可能元素又被复用，当然，这样的概率很小。
 
