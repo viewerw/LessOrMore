@@ -1,4 +1,3 @@
-  
 ---
 layout: post
 title:  postMessage使用以及demo
@@ -21,7 +20,7 @@ postMessage介绍
 
 > otherWindow.postMessage(message,targetOrigin)
 
-##otherWindow
+## otherWindow
 
 这是一个对其他窗口的引用，可以通过以下方式获取：
 1.通过一个iframe对象的contentWindow属性获取；
@@ -31,27 +30,27 @@ postMessage介绍
 
 注：这个window对象表示，消息进行dispatch的起始窗口，如果，你想通过父window向子window传递消息，那么otherWindow应该是window.frames[0]，如果，子窗口想向父窗口传递消息，那么otherWindow应该是window.parent。
 
-##message
+## message
 
 这是通过postMessage传递的消息对象。它有三个属性 ：
 
-#data
+### data
 
 传递的消息，值一般是字符串，可以是json解析的字符串。
 
-#orgin
+### orgin
 
 消息发送的源地址，格式：协议+主机+端口
 
-#source
+### source
 
 消息发送的源窗口引用。
 
-##targetOrigin
+## targetOrigin
 
 指定otherWindow的源（协议+主机+端口），来决定消息是否应该被分发。如果，otherWindow的源和targetOrigin不匹配，那么消息将停止在该窗口分发。当然，我们也可以指定成通配符'*',表示不需要校验源。为了安全起见，防止信息泄露，最好指定源。
 
-##消息接受
+## 消息接受
 
 通过以下JavaScript代码实现消息的接受：
 	window.addEventListener("message", receiveMessage, false);
@@ -72,7 +71,7 @@ postMessage介绍
 demo
 ===========================
 
-##a.html
+## a.html
 
 	<!DOCTYPE html>
 	<html>
@@ -91,7 +90,7 @@ demo
 	</body>
 	</html>
 
-##b.html
+## b.html
 
 	<!DOCTYPE html>
 	<html>
